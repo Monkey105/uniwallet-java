@@ -11,7 +11,7 @@ Find the uniwallet documentation here [uniwallet docs](https://uniwalletapi1.doc
 
 You'd currently need to install manually with our .jar file
 
-*   UNIWallet JAR from https://github.com/philip-nunooo/uniwallet-java/releases/latest
+*   UNIWallet JAR from https://github.com/philip-nunoo/uniwallet-java/releases/latest
 
 ### Maven
 
@@ -92,8 +92,8 @@ Obtain your `MERCHANT_ID`, `API_KEY` and `PRODUCT_ID` from uniwallet.
 
 ## Other api libraries
 
-*   JAVA: https://github.com/philip-nunooo/uniwallet-java
-*   PHP: https://github.com/philip-nunooo/uniwallet-php
-*   NODE: https://github.com/philip-nunooo/uniwallet-node
-*   RUBY: https://github.com/philip-nunooo/uniwallet-ruby
-*   PYTHON: https://github.com/philip-nunooo/uniwallet-python
+*   JAVA: https://github.com/philip-nunoo/uniwallet-java
+*   PHP: https://github.com/philip-nunoo/uniwallet-php
+*   NODE: https://github.com/philip-nunoo/uniwallet-node
+*   RUBY: https://github.com/philip-nunoo/uniwallet-ruby
+*   PYTHON: https://github.com/philip-nunoo/uniwallet-python
