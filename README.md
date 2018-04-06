@@ -36,6 +36,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Transflow transflow = new Transflow(MERCHANT_ID, API_KEY, PRODUCT_ID);
+        // If you are using the test api from Uniwallet use this
+        // UniWallet uniWallet = new UniWallet(transflow, true);
         UniWallet uniWallet = new UniWallet(transflow);
 
         // do something awesome
