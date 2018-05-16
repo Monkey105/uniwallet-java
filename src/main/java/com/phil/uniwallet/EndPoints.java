@@ -13,7 +13,7 @@ public class EndPoints {
     public static String GET_NETWORKS = "uniwallet/get/available/networks";
     public static String CREDIT_CUSTOMER = "uniwallet/credit/customer";
     public static String DEBIT_CUSTOMER = "uniwallet/debit/customer";
-    public static String GET_TEST_ENDPOINT = "https://uniwallet.transflowservices.com";
+    public static String GET_TEST_ENDPOINT = "https://uniwallet.transflowservice.com";
     public static String GET_TEST_PORT = "6560";
     public static String GET_LIVE_ENDPOINT = "";
     public static String GET_LIVE_PORT = "";

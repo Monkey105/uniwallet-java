@@ -14,10 +14,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -84,7 +87,7 @@ public class UniWallet implements UniWalletInterface {
     }
 
     @Override
-    public String[] getNetworks() throws IOException {
+    public String[] getNetworks() throws UniWalletException {
         String url = buildURL(EndPoints.GET_NETWORKS);
 
         this.client = MyOkHttpClient.getHttpClient(url);
@@ -93,18 +96,29 @@ public class UniWallet implements UniWalletInterface {
                 .get()
                 .build();
 
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
-            String message = "{ resp: " + response.body().string() + "}";
-            JSONObject jSONObject = new JSONObject(message);
-            JSONArray jsonArray = jSONObject.getJSONArray("resp");
+        try {
+            Response response = client.newCall(request).execute();
 
-            String[] ret = new String[jsonArray.length()];
-            for (int i = 0; i < jsonArray.length(); i++) {
-                ret[i] = jsonArray.getString(i);
+            if (response.isSuccessful()) {
+                String message = "{ resp: " + response.body().string() + "}";
+                JSONObject jSONObject = new JSONObject(message);
+                JSONArray jsonArray = jSONObject.getJSONArray("resp");
+
+                String[] ret = new String[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ret[i] = jsonArray.getString(i);
+                }
+
+                return ret;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UniWallet.class.getName()).log(Level.SEVERE, null, ex);
+
+            if (ex instanceof UnknownHostException) {
+                throw new UniWalletException("Destination host unreachable", ex.getCause());
             }
 
-            return ret;
+            throw new UniWalletException(ex.getMessage(), ex.getCause());
         }
 
         return null;
@@ -115,7 +129,7 @@ public class UniWallet implements UniWalletInterface {
     public UniWalletResponse creditCustomer(String referenceNumber,
             String msisdn, String amount, String network,
             String narration
-    ) throws IOException {
+    ) throws UniWalletException {
         String url = buildURL(EndPoints.CREDIT_CUSTOMER);
 
         Map<String, String> map = new HashMap();
@@ -130,16 +144,25 @@ public class UniWallet implements UniWalletInterface {
         map.put("voucher", "voucher");
         map.put("narration", narration);
 
-        String requestResponse = this.post(url, this.getJsonStringFromHashMap(map));
+        try {
+            String requestResponse = this.post(url, this.getJsonStringFromHashMap(map));
+            return new UniWalletResponse(new JSONObject(requestResponse));
+        } catch (IOException ex) {
+            Logger.getLogger(UniWallet.class.getName()).log(Level.SEVERE, null, ex);
 
-        return new UniWalletResponse(new JSONObject(requestResponse));
+            if (ex instanceof UnknownHostException) {
+                throw new UniWalletException("Destination host unreachable", ex.getCause());
+            }
+
+            throw new UniWalletException(ex.getMessage(), ex.getCause());
+        }
     }
 
     @Override
     public UniWalletResponse debitCustomer(
             String referenceNumber, String msisdn, String amount,
             String network, String voucher, String narration
-    ) throws IOException {
+    ) throws UniWalletException {
         String url = buildURL(EndPoints.DEBIT_CUSTOMER);
 
         Map<String, String> map = new HashMap();
@@ -154,9 +177,19 @@ public class UniWallet implements UniWalletInterface {
         map.put("voucher", "voucher");
         map.put("narration", narration);
 
-        String requestResponse = this.post(url, this.getJsonStringFromHashMap(map));
+        try {
+            String requestResponse = this.post(url, this.getJsonStringFromHashMap(map));
+            return new UniWalletResponse(new JSONObject(requestResponse));
+        } catch (IOException ex) {
+            Logger.getLogger(UniWallet.class.getName()).log(Level.SEVERE, null, ex);
 
-        return new UniWalletResponse(new JSONObject(requestResponse));
+            if (ex instanceof UnknownHostException) {
+                throw new UniWalletException("Destination host unreachable", ex.getCause());
+            }
+
+            throw new UniWalletException(ex.getMessage(), ex.getCause());
+        }
+
     }
 
     private String getJsonStringFromHashMap(Map<String, String> map) {
